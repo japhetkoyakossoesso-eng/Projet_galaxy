@@ -1,3 +1,5 @@
+import random
+
 from kivy import platform
 from kivy.config import Config
 Config.set('graphics', 'width', '900')
@@ -24,7 +26,7 @@ class MainWidget(Widget):
     H_LINES_SPACING = .15  # pourcentage pour la largeur de l'écran
     horizontal_lines = []
 
-    SPEED = 1
+    SPEED = 5
     current_offset_y = 0
     current_y_loop = 0
 
@@ -32,7 +34,7 @@ class MainWidget(Widget):
     current_speed_x = 0
     current_offset_x = 0
 
-    NB_TILES = 4
+    NB_TILES = 8
     tiles = []
     tiles_coordinates = []
 
@@ -64,8 +66,37 @@ class MainWidget(Widget):
                 self.tiles.append(Quad())
 
     def generate_tiles_coordinates(self):
-        for i in range(0, self.NB_TILES):
-            self.tiles_coordinates.append((0, i))
+        last_x = 0
+        last_y = 0
+
+        # supprimer les coordonnées sorties de l'écran
+        # ti_i < self.current_y_loop
+        for i in range(len(self.tiles_coordinates)-1, -1, -1):
+            if self.tiles_coordinates[i][1] < self.current_y_loop:
+                del self.tiles_coordinates[i]
+
+        if len(self.tiles_coordinates) > 0:
+            last_coordinate = self.tiles_coordinates[-1]
+            last_x = last_coordinate[0]
+            last_y = last_coordinate[1]+1
+
+        for i in range(len(self.tiles_coordinates), self.NB_TILES):
+            r = random.randint(0, 2)
+            # 0 -> en avant
+            # 1 ->  à droite
+            # 2 -> à gauche
+            self.tiles_coordinates.append((last_x, last_y))
+            if r == 1:
+                last_x += 1
+                self.tiles_coordinates.append((last_x, last_y))
+                last_y += 1
+                self.tiles_coordinates.append((last_x, last_y))
+            elif r == 2:
+                last_x -= 1
+                self.tiles_coordinates.append((last_x, last_y))
+                last_y += 1
+                self.tiles_coordinates.append((last_x, last_y))
+            last_y += 1
 
     def init_vertical_lines(self,):
         with self.canvas:
@@ -152,8 +183,9 @@ class MainWidget(Widget):
         if self.current_offset_y >= spacing_y:
             self.current_offset_y -= spacing_y
             self.current_y_loop += 1
+            self.generate_tiles_coordinates()
 
-        # self.current_offset_x += self.current_speed_x * time_factor
+        self.current_offset_x += self.current_speed_x * time_factor
 
 
 class GalaxyApp(App):
