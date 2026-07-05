@@ -18,8 +18,8 @@ class MainWidget(Widget):
     perspective_point_x = NumericProperty(0)
     perspective_point_y = NumericProperty(0)
 
-    V_NB_LINES = 4
-    V_LINES_SPACING = .1  # pourcentage pour la largeur de l'écran
+    V_NB_LINES = 8
+    V_LINES_SPACING = .2  # pourcentage pour la largeur de l'écran
     vertical_lines = []
 
     H_NB_LINES = 8
@@ -85,6 +85,13 @@ class MainWidget(Widget):
             # 0 -> en avant
             # 1 ->  à droite
             # 2 -> à gauche
+            start_index = -int(self.V_NB_LINES / 2) + 1
+            end_index = start_index + self.V_NB_LINES - 1
+            if last_x <= start_index:
+                r = 1
+            if last_x >= end_index:
+                r = 2
+
             self.tiles_coordinates.append((last_x, last_y))
             if r == 1:
                 last_x += 1
