@@ -318,8 +318,12 @@ class MainWidget(RelativeLayout):
             self.menu_widget.opacity = 1
             self.sound_music1.stop()
             self.sound_gameover_impact.play()
-
+            Clock.schedule_once(self.play_voice_game_over, 3)
             print("GAME OVER")
+
+    def play_voice_game_over(self, dt):
+        if self.state_game_over:
+            self.sound_gameover_voice.play()
 
     def on_menu_button_pressed(self):
         print("BOUTON")
