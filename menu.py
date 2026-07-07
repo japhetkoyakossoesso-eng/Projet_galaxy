@@ -7,3 +7,4 @@ class MenuWidget(RelativeLayout):
         if self.opacity == 0:
             return False
         return super(RelativeLayout, self).on_touch_down(touch)
+
