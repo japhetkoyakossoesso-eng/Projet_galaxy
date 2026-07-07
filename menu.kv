@@ -6,11 +6,12 @@ MenuWidget:
             rgba: 0, 0, 0, .8
         Rectangle:
             size: self.size
+            pos: self.pos
     Label:
-        text: "TITRE"
+        text: root.parent.menu_title if root.parent else ""
         pos_hint: { "center_x": .5, "center_y": .6 }
     Button:
-        text : "OK"
+        text: root.parent.menu_button_title if root.parent else ""
         pos_hint: { "center_x": .5, "center_y": .4 }
         size_hint: .2, .1
-        on_press: root.parent.on_menu_button_pressed()
+        on_press: root.parent.on_menu_button_pressed() if root.parent else None
